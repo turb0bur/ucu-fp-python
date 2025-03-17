@@ -1,10 +1,10 @@
+import sys
 import unittest
 from random import randint
 
 from Essentials.Factorial.task import factorial_impl
 
 
-# todo: replace this with an actual test
 class TestCase(unittest.TestCase):
     def test_f_0(self):
         self.assertEqual(factorial_impl()(0), 1, msg="factorial of 0 should be 1")
@@ -24,3 +24,11 @@ class TestCase(unittest.TestCase):
             res_f = res_rnd / res_prev_rnd
 
             self.assertEqual(res_f, rnd, msg=f"Expected factorial({rnd}) / factorial({rnd - 1}) is {rnd} but got {res_rnd} / {res_prev_rnd} is {res_f}")
+
+    def test_large_input(self):
+        factorial = factorial_impl()
+        try:
+            result = factorial(sys.getrecursionlimit() + 2)
+            self.assertIsNotNone(result, msg=f"factorial of {sys.getrecursionlimit() + 2} should not cause stack overflow")
+        except RecursionError:
+            self.fail(f"factorial of {sys.getrecursionlimit() + 2} caused a stack overflow")
